@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/java.js" type="module"></script>
+  <title>Add Course</title>
+</head>
+<header>
+    <button class="menu-btn open" id="open-menu"  aria-label="Open Menu">
+      <span class="menu-icon">
+          <span class="bars"></span>
+          <span class="bars"></span>
+          <span class="bars"></span>
+      </span>
+  </button>
+  <nav id="nav-menu">
+      <button class="menu-btn close" id="close-menu">
+          <span>X</span>
+      </button>
+      
+      <ul>
+          
+          <li><a href="/"> COURSES</a></li>
+          <li><a href="/add"> ADD COURSE</a></li>
+          <li><a href="/about"> ABOUT </a></li>
+      </ul>
+  </nav>
+  </header>
+<body>
+  <h1>Add Course</h1>
+  <form action="/add" method="POST">
+    <label for="coursecode">Course Code:</label>
+    <input type="text" id="coursecode" name="CourseCode" ><br>
+    <label for="coursename">Course Name:</label>
+    <input type="text" id="coursename" name="CourseName" ><br>
+    <label for="progression">Progression:</label>
+    <input type="text" id="progression" name="Progression" ><br>
+    <label for="syllabus">Syllabus (URL):</label>
+    <input type="text" id="syllabus" name="Syllabus" >
+    <button type="submit">Add</button>
+  </form>
+</body>
+</html>
