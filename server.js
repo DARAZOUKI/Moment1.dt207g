@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3').verbose();
+const { body, validationResult } = require('express-validator');
+
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -33,19 +35,37 @@ app.get('/', (req, res) => {
     });
 });
 
-app.post('/', (req, res) => {
-    const { CourseCode, CourseName, Syllabus, Progression } = req.body;
-    db.run('INSERT INTO courses (coursecode, coursename, syllabus, progression) VALUES (?, ?, ?, ?)',
-        [CourseCode, CourseName, Syllabus, Progression],
-        (err) => {
-            if (err) {
-                console.error('Error inserting course:', err);
-                res.status(500).send('Internal Server Error');
-            } else {
-                res.redirect('/');
-            }
-        });
-});
+app.post('/add', 
+    // Validation middleware
+    [
+        body('CourseCode').notEmpty().withMessage('Course Code is required'),
+        body('CourseName').notEmpty().withMessage('Course Name is required'),
+        body('Syllabus').notEmpty().withMessage('Syllabus is required'),
+        body('Progression').notEmpty().withMessage('Progression is required')
+    ],
+    (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            // If there are validation errors.
+            return res.render('add', {
+                errors: errors.array(),
+                data: req.body
+            });
+        }
+
+        const { CourseCode, CourseName, Syllabus, Progression } = req.body;
+        db.run('INSERT INTO courses (coursecode, coursename, syllabus, progression) VALUES (?, ?, ?, ?)',
+            [CourseCode, CourseName, Syllabus, Progression],
+            (err) => {
+                if (err) {
+                    console.error('Error adding course:', err);
+                    res.status(500).send('Internal Server Error');
+                } else {
+                    res.redirect('/');
+                }
+            });
+    }
+);
 
 app.get('/delete/:id', (req, res) => {
     const courseId = req.params.id;
