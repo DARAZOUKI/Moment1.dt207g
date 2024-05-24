@@ -30,14 +30,38 @@
   </header>
   <h1>Add Course</h1>
   <form action="/add" method="POST">
-    <label for="coursecode">Course Code:</label>
-    <input type="text" id="coursecode" name="CourseCode" ><br>
-    <label for="coursename">Course Name:</label>
-    <input type="text" id="coursename" name="CourseName" ><br>
-    <label for="progression">Progression:</label>
-    <input type="text" id="progression" name="Progression" ><br>
-    <label for="syllabus">Syllabus (URL):</label>
-    <input type="text" id="syllabus" name="Syllabus" >
+    <div class="form-group">
+      <label for="coursecode">Course Code:</label>
+      <input type="text" id="coursecode" name="CourseCode" value="<%= data.CourseCode %>">
+      <% if (errors.some(error => error.param === 'CourseCode')) { %>
+        <span class="error-message"><%= errors.find(error => error.param === 'CourseCode').msg %></span>
+      <% } %>
+    </div>
+    
+    <div class="form-group">
+      <label for="coursename">Course Name:</label>
+      <input type="text" id="coursename" name="CourseName" value="<%= data.CourseName %>">
+      <% if (errors.some(error => error.param === 'CourseName')) { %>
+        <span class="error-message"><%= errors.find(error => error.param === 'CourseName').msg %></span>
+      <% } %>
+    </div>
+    
+    <div class="form-group">
+      <label for="progression">Progression:</label>
+      <input type="text" id="progression" name="Progression" value="<%= data.Progression %>">
+      <% if (errors.some(error => error.param === 'Progression')) { %>
+        <span class="error-message"><%= errors.find(error => error.param === 'Progression').msg %></span>
+      <% } %>
+    </div>
+    
+    <div class="form-group">
+      <label for="syllabus">Syllabus (URL):</label>
+      <input type="text" id="syllabus" name="Syllabus" value="<%= data.Syllabus %>">
+      <% if (errors.some(error => error.param === 'Syllabus')) { %>
+        <span class="error-message"><%= errors.find(error => error.param === 'Syllabus').msg %></span>
+      <% } %>
+    </div>
+    
     <button type="submit">Add</button>
   </form>
 </body>

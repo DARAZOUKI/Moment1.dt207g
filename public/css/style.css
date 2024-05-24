@@ -8,8 +8,8 @@ body{
     max-width: 100%;
     height: auto;
     font-family: 'Roboto', sans-serif;
-    background-color: #FFFFFF; /* Set a contrasting background color */
-    color: #000000; /* Set a contrasting text color */
+    background-color: #FFFFFF; 
+    color: #000000;
     overflow-x: hidden;
 }
 
@@ -33,10 +33,10 @@ header h1{
    font-style: oblique;
 
 }
-/* Styles for the "TaxiRosa" text in the header */
+
 header h1 a {
-    text-decoration: none; /* Remove underline */
-    color: #181515; /* Set the text color */
+    text-decoration: none; 
+    color: #181515; 
 }
 
 header h1 a:hover {
@@ -89,8 +89,8 @@ nav  ul li {
 
 .menu-btn.close {
     position: absolute;
-    top: 10px; /* Adjust the top value as needed */
-    right: 10px; /* Adjust the right value as needed */
+    top: 10px; 
+    right: 10px; 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -174,30 +174,39 @@ nav  ul li {
   .courses li a:hover {
     color: #1f06be;
   }
+  .form-group {
+    margin-bottom: 15px;
+  }
 label {
     display: block; /* Ensures each label appears on its own line */
     margin-bottom: 10px; /* Adds space between labels */
-    font-weight: bold; /* Makes the label text bold */
-    color: #333; /* Sets the label text color */
+    font-weight: bold; 
+    color: #333;
   }
   /* CSS for input fields */
 input[type="text"] {
-    width: 100%; /* Makes the input field fill the entire width of its container */
+    width: 100%;
     padding: 10px; /* Adds padding inside the input field */
     margin-bottom: 20px; /* Adds space between input fields */
-    border: 1px solid #ccc; /* Sets a border around the input field */
-    border-radius: 5px; /* Adds rounded corners to the input field */
-    box-sizing: border-box; /* Ensures padding and border are included in the input field's total width */
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+    box-sizing: border-box; 
+  }
+  .error-message {
+    color: #d86f6f;
+    margin-top: 5px;
+    font-size: 0.9rem;
+  
   }
   
   /* CSS for submit button */
   button[type="submit"] {
-    padding: 10px 20px; /* Adds padding inside the button */
-    background-color: #ed9d9d; /* Sets the background color of the button */
-    color: #040404; /* Sets the text color of the button */
-    border: none; /* Removes the button border */
-    border-radius: 5px; /* Adds rounded corners to the button */
-    cursor: pointer; /* Changes the cursor to a pointer on hover */
+    padding: 10px 20px; 
+    background-color: #ed9d9d; 
+    color: #040404; 
+    border: none; 
+    border-radius: 5px;
+    cursor: pointer; 
   }
   .container {
     max-width: 800px;

@@ -1,13 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3').verbose();
-const { body, validationResult } = require('express-validator');
-
 
 const app = express();
 const PORT = process.env.PORT || 8000;
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // SQLite database connection
 const dbPath = 'dt207g1.db';
@@ -23,6 +22,39 @@ const db = new sqlite3.Database(dbPath, (err) => {
 // Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// Validation function
+function validateCourse(data) {
+    const errors = [];
+
+    if (!data.CourseCode || data.CourseCode.trim() === '') {
+        errors.push({ msg: 'Course Code is required', param: 'CourseCode' });
+    }
+
+    if (!data.CourseName || data.CourseName.trim() === '') {
+        errors.push({ msg: 'Course Name is required', param: 'CourseName' });
+    } else if (!/^[A-Za-z\s]+$/.test(data.CourseName)) {
+        errors.push({ msg: 'Course Name must contain only letters and spaces', param: 'CourseName' });
+    }
+
+    if (!data.Syllabus || data.Syllabus.trim() === '') {
+        errors.push({ msg: 'Syllabus is required', param: 'Syllabus' });
+    } else {
+        try {
+            new URL(data.Syllabus);
+        } catch (_) {
+            errors.push({ msg: 'Syllabus must be a valid URL', param: 'Syllabus' });
+        }
+    }
+
+    if (!data.Progression || data.Progression.trim() === '') {
+        errors.push({ msg: 'Progression is required', param: 'Progression' });
+    } else if (!['A', 'B', 'C', 'D', 'E'].includes(data.Progression)) {
+        errors.push({ msg: 'Progression must be A, B, C, D, or E', param: 'Progression' });
+    }
+
+    return errors;
+}
+
 // Routes
 app.get('/', (req, res) => {
     db.all('SELECT * FROM courses', (err, rows) => {
@@ -35,37 +67,35 @@ app.get('/', (req, res) => {
     });
 });
 
-app.post('/add', 
-    // Validation middleware
-    [
-        body('CourseCode').notEmpty().withMessage('Course Code is required'),
-        body('CourseName').notEmpty().withMessage('Course Name is required'),
-        body('Syllabus').notEmpty().withMessage('Syllabus is required'),
-        body('Progression').notEmpty().withMessage('Progression is required')
-    ],
-    (req, res) => {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            // If there are validation errors.
-            return res.render('add', {
-                errors: errors.array(),
-                data: req.body
-            });
-        }
+app.get('/add', (req, res) => {
+    res.render('add', { errors: [], data: {} });
+});
 
-        const { CourseCode, CourseName, Syllabus, Progression } = req.body;
-        db.run('INSERT INTO courses (coursecode, coursename, syllabus, progression) VALUES (?, ?, ?, ?)',
-            [CourseCode, CourseName, Syllabus, Progression],
-            (err) => {
-                if (err) {
-                    console.error('Error adding course:', err);
-                    res.status(500).send('Internal Server Error');
-                } else {
-                    res.redirect('/');
-                }
-            });
+app.post('/add', (req, res) => {
+    const errors = validateCourse(req.body);
+
+    if (errors.length > 0) {
+        console.log('Validation errors:', errors);
+        return res.render('add', {
+            errors: errors,
+            data: req.body
+        });
     }
-);
+
+    const { CourseCode, CourseName, Syllabus, Progression } = req.body;
+    console.log('Form data:', req.body);
+
+    db.run('INSERT INTO courses (coursecode, coursename, syllabus, progression) VALUES (?, ?, ?, ?)',
+        [CourseCode, CourseName, Syllabus, Progression],
+        (err) => {
+            if (err) {
+                console.error('Error adding course:', err);
+                res.status(500).send('Internal Server Error');
+            } else {
+                res.redirect('/');
+            }
+        });
+});
 
 app.get('/delete/:id', (req, res) => {
     const courseId = req.params.id;
@@ -77,24 +107,6 @@ app.get('/delete/:id', (req, res) => {
             res.redirect('/');
         }
     });
-});
-
-app.get('/add', (req, res) => {
-    res.render('add');
-});
-
-app.post('/add', (req, res) => {
-    const { CourseCode, CourseName, Syllabus, Progression } = req.body;
-    db.run('INSERT INTO courses (coursecode, coursename, syllabus, progression) VALUES (?, ?, ?, ?)',
-        [CourseCode, CourseName, Syllabus, Progression],
-        (err) => {
-            if (err) {
-                console.error('Error adding course:', err);
-                res.status(500).send('Internal Server Error');
-            } else {
-                res.redirect('/');
-            }
-        });
 });
 
 app.get('/about', (req, res) => {
