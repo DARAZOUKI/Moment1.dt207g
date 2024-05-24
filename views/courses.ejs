@@ -7,6 +7,7 @@
   <script src="/java.js" type="module"></script>
   <title>Course Management</title>
 </head>
+<body>
 <header>
   <button class="menu-btn open" id="open-menu"  aria-label="Open Menu">
     <span class="menu-icon">
@@ -28,14 +29,15 @@
     </ul>
 </nav>
 </header>
+<main>
   <h1>Courses</h1>
   <ul class="courses">
     <% courses.forEach(course => { %>
       <li>
-        <p>Course Name: <%= course.coursename %></p>
         <p>Course Code: <%= course.coursecode %></p>
-        <p>Syllabus: <%= course.syllabus %></p>
+        <p>Course Name: <%= course.coursename %></p>
         <p>Progression: <%= course.progression %></p>
+        <p>Syllabus: <%= course.syllabus %></p>
         
         <a href="/delete/<%= course.id %>">Delete</a>
       </li>
@@ -43,5 +45,6 @@
   </ul>
 
   <a href="/add">Add Course</a>
+</main>
 </body>
 </html>
